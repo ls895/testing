@@ -1,0 +1,115 @@
+{
+  "places" : {
+    "p1" : {
+      "name" : "HMS Belfast",
+      "position" : "51.506579,-0.08138899999994464"
+    },
+    "p2" : {
+      "name" : "Big Ben",
+      "position" : "51.50072919999999,-0.12462540000001354"
+    },
+    "p3" : {
+      "name" : "Westminster Bridge",
+      "position" : "51.5008638,-0.12196449999999004"
+    },
+    "p4" : {
+      "name" : "London Eye",
+      "position" : "51.503324,-0.1195430000000215"
+    },
+    "p5" : {
+      "name" : "Oxford Street",
+      "position" : "51.5149255,-0.14482590000000073"
+    },
+    "p6" : {
+      "name" : "London School of Economics",
+      "position" : "51.5144077,-0.11737659999994321"
+    },
+    "p7" : {
+      "name" : "King's College London",
+      "position" : "51.51148639999999,-0.11599699999999302"
+    },
+    "p8" : {
+      "name" : "Old Royal Naval College",
+      "position" : "51.4827375,-0.008513499999935448"
+    }
+  },
+  "trips" : {
+    "trip1" : {
+      "title" : "trip1",
+      "travellers" : {
+        "1ZSEuHGCCEYrc1xVbu9ZeSh6mhn2" : true
+      },
+      "days": {
+          "pushkey1": "SomedateString",
+          "pushkey2": "SomedateString"
+      }
+    },
+    "trip2" : {
+      "title" : "trip2",
+      "travellers" : {
+        "1ZSEuHGCCEYrc1xVbu9ZeSh6mhn2" : true,
+        "VCCvRcmCuHSOaQxHJ0GvuUEEgiB3" : true
+        },
+        "days": {
+            "pushkey3": "SomedateString",
+            "Pushkey4": "SomedateString"
+        }
+    },
+    "trip3" : {
+      "title" : "trip3",
+      "travellers" : {
+        "VCCvRcmCuHSOaQxHJ0GvuUEEgiB3" : true
+      },
+      "days": {
+          "pushkey5": "SomedateString"
+      }
+    }
+  },
+  "users" : {
+    "1ZSEuHGCCEYrc1xVbu9ZeSh6mhn2" : {
+      "trips" : {
+        "trip1" : true,
+        "trip2" : true
+      }
+    },
+    "VCCvRcmCuHSOaQxHJ0GvuUEEgiB3" : {
+      "trips" : {
+        "trip2" : true,
+        "trip3" : true
+      }
+    }
+  },
+  "visits" : {
+    "trip1" : {
+      "v1" : {
+        "day" : "pushkey1",
+        "place" : "p1",
+        "time" : "timestamp"
+      },
+      "v2" : {
+        "day" : "pushkey2",
+        "place" : "p2",
+        "time" : "timestamp"
+      }
+    },
+    "trip2" : {
+      "v1" : {
+        "day" : "pushkey3",
+        "place" : "p3",
+        "time" : "timestamp"
+      },
+      "v2" : {
+        "day" : "pushkey4",
+        "place" : "p4",
+        "time" : "timestamp"
+      }
+    },
+    "trip3" : {
+      "v1" : {
+        "day" : "pushkey5",
+        "place" : "p5",
+        "time" : "timestamp"
+      }
+    }
+  }
+}
