@@ -1,10 +1,11 @@
-import { TRIP_TITLE, DAY_CHANGED, DAY_ADDED, DAY_REMOVED,
+import { TRIP_ID, TRIP_TITLE, DAY_DETAIL_CHANGED, DAY_ADDED, DAY_REMOVED,
     TRAVELLER_ADDED, TRAVELLER_REMOVED,
     VISIT_ADDED, VISIT_REMOVED, VISIT_CHANGED, PLACE_DETAIL
 } from '../consts';
 import _ from 'lodash';
 
 const INITIAL_STATE = {
+    tripid: null,
     title: null,
     days: {},
     travellers: {},
@@ -14,12 +15,17 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
     switch (action.type) {
+        case TRIP_ID:
+            return {
+                ...state,
+                tripid: action.payload
+            };
         case TRIP_TITLE:
             return {
                 ...state,
                 title: action.payload
             };
-        case DAY_CHANGED:
+        case DAY_DETAIL_CHANGED:
         case DAY_ADDED:
         case DAY_REMOVED:
             return {
@@ -51,11 +57,15 @@ export default function(state = INITIAL_STATE, action) {
 
 function daysReducer(state, action) {
     switch (action.type) {
-        case DAY_CHANGED:
-        case DAY_ADDED:
+        case DAY_DETAIL_CHANGED:
             var obj = { ...state };
-            obj[action.payload.key] = action.payload.date;
+            obj[action.payload.day] = { ...obj[action.payload.day] };
+            obj[action.payload.day][action.payload.key] = action.payload.data;
             return obj;
+        case DAY_ADDED:
+            var obj2 = { ...state };
+            obj2[action.payload.key] = action.payload.date;
+            return obj2;
         case DAY_REMOVED:
             return _.omit(state, action.payload);
         default:

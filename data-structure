@@ -40,9 +40,16 @@
         "1ZSEuHGCCEYrc1xVbu9ZeSh6mhn2" : true
       },
       "days": {
-          "pushkey1": "SomedateString",
-          "pushkey2": "SomedateString"
-      }
+          "pushkey1": {
+                "date": "somedatestring",
+                "visitorder": ["v1", "v3", "v2"]
+          }
+          "pushkey2": {
+                "date": "anotherdatestring",
+                "visitorder": ["v4", "v5", "v6"]
+          }
+      },
+      "dayorder": ["pushkey2", "pushkey1"]
     },
     "trip2" : {
       "title" : "trip2",
@@ -82,26 +89,31 @@
   "visits" : {
     "trip1" : {
       "v1" : {
-        "day" : "pushkey1",
         "place" : "p1",
-        "time" : "timestamp"
+        "arriveTime" : "timestamp"
+        "departTime" : "timestamp"
       },
       "v2" : {
-        "day" : "pushkey2",
         "place" : "p2",
-        "time" : "timestamp"
+        "arriveTime" : "timestamp"
+        "departTime" : "timestamp"
       }
     },
     "trip2" : {
       "v1" : {
-        "day" : "pushkey3",
         "place" : "p3",
         "time" : "timestamp"
       },
       "v2" : {
-        "day" : "pushkey4",
         "place" : "p4",
         "time" : "timestamp"
+      },
+      "v3" : {
+        ""
+      },
+      "v4" : {
+        "order" : 4,
+        "day": "pushkey3"
       }
     },
     "trip3" : {
@@ -113,3 +125,7 @@
     }
   }
 }
+
+days1: [v1, v2, v3]
+and then rewrite days1 array
+pulls

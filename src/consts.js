@@ -14,9 +14,11 @@ export const FETCH_TRIPS = 'FETCH_TRIPS';
 
 export const NEW_TRIP = 'NEW_TRIP';
 
+export const TRIP_ID = 'TRIP_ID';
+
 export const TRIP_TITLE = 'TRIP_TITLE';
 
-export const DAY_CHANGED = 'DAY_CHANGED';
+export const DAY_DETAIL_CHANGED = 'DAY_CHANGED';
 
 export const DAY_ADDED = 'DAY_ADDED';
 

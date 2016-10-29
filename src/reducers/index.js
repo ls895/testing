@@ -10,3 +10,24 @@ const rootReducer = combineReducers({
 });
 
 export default rootReducer;
+
+// {
+//     traffic: {
+//         day1: {
+//             slot1: {
+//
+//             },
+//             slot2: {
+//
+//             }
+//         },
+//         day2: {
+//             slot1: {
+//
+//             },
+//             slot2: {
+//
+//             }
+//         }
+//     }
+// }

@@ -13,9 +13,13 @@ export function newTrip() {
             title: 'UK',
             travellers: {
                 '1ZSEuHGCCEYrc1xVbu9ZeSh6mhn2': true
-            }
+            },
+            dayOrder: [newDayKey]
         };
-        updates['/trips/' + newTripKey].days[newDayKey] = 'SomedateString';
+        updates['/trips/' + newTripKey].days[newDayKey] = {
+            date: 'somedatestring',
+            visitOrder: []
+        };
         updates['/users/1ZSEuHGCCEYrc1xVbu9ZeSh6mhn2/trips/' + newTripKey] = true;
         return database.ref().update(updates).then(function() {
             // callOffTripListeners();
@@ -59,9 +63,17 @@ export function newTrip() {
 //
 // }
 //
-// function reorderVisit() {
-//
-// }
+export function reorderVisit(tripid, dayid, newOrder) {
+    return dispatch => {
+        tripsRef.child(tripid).child(dayid).child('visitOrder').transaction(newOrder);
+    }
+}
+
+export function dragVisitAcrossDay(tripid, old_day, old_day_order, new_day, new_day_order) {
+    return dispatch => {
+        trip
+    }
+}
 //
 // function removeDay(tripid, dayid) {
 //

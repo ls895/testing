@@ -3,14 +3,18 @@
 import { tripsRef,
     visitsRef,
     placesRef,
-    TRIP_TITLE,
-    DAY_ADDED, DAY_REMOVED, DAY_CHANGED,
+    TRIP_ID, TRIP_TITLE,
+    DAY_ADDED, DAY_REMOVED, DAY_DETAIL_CHANGED,
     TRAVELLER_ADDED, TRAVELLER_REMOVED,
     VISIT_ADDED, VISIT_REMOVED, VISIT_CHANGED, PLACE_DETAIL
 } from '../consts';
 
 export function fetchTripDetail(tripid) {
     return dispatch => {
+        dispatch({
+            type: TRIP_ID,
+            payload: tripid
+        });
         // first immediately dispatch UI state blablabla
         // then do the following
         tripsRef.child(tripid).child('title').once('value').then(function(snap) {
@@ -20,6 +24,7 @@ export function fetchTripDetail(tripid) {
             });
         });
         tripsRef.child(tripid).child('days').orderByValue().on('child_added', function(snap) {
+            var key = snap.key;
             dispatch({
                 type: DAY_ADDED,
                 payload: {
@@ -27,20 +32,21 @@ export function fetchTripDetail(tripid) {
                     date: snap.val()
                 }
             });
+            tripsRef.child(tripid).child('days').child(key).on('child_changed', function(snap) {
+                dispatch({
+                    type: DAY_DETAIL_CHANGED,
+                    payload: {
+                        day: key,
+                        key: snap.key,
+                        data: snap.val()
+                    }
+                });
+            });
         });
         tripsRef.child(tripid).child('days').on('child_removed', function(snap) {
             dispatch({
                 type: DAY_REMOVED,
                 payload: snap.key
-            });
-        });
-        tripsRef.child(tripid).child('days').on('child_changed', function(snap) {
-            dispatch({
-                type: DAY_CHANGED,
-                payload: {
-                    key: snap.key,
-                    date: snap.val()
-                }
             });
         });
         //
@@ -99,8 +105,4 @@ export function fetchTripDetail(tripid) {
         // listeners.tripVisits = visitsRef.child(tripid);
     // }
 };
-}
-
-export function dayChangeDate() {
-
 }
