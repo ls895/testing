@@ -1,4 +1,4 @@
-import { TRIP_ID, TRIP_TITLE, DAY_DETAIL_CHANGED, DAY_ADDED, DAY_REMOVED,
+import { RESET, TRIP_ID, TRIP_TITLE, DAY_ORDER, DAY_DETAIL_CHANGED, DAY_ADDED, DAY_REMOVED,
     TRAVELLER_ADDED, TRAVELLER_REMOVED,
     VISIT_ADDED, VISIT_REMOVED, VISIT_CHANGED, PLACE_DETAIL
 } from '../consts';
@@ -8,6 +8,7 @@ const INITIAL_STATE = {
     tripid: null,
     title: null,
     days: {},
+    dayOrder: [],
     travellers: {},
     visits: {},
     places: {}
@@ -24,6 +25,11 @@ export default function(state = INITIAL_STATE, action) {
             return {
                 ...state,
                 title: action.payload
+            };
+        case DAY_ORDER:
+            return {
+                ...state,
+                dayOrder: action.payload
             };
         case DAY_DETAIL_CHANGED:
         case DAY_ADDED:
@@ -50,6 +56,8 @@ export default function(state = INITIAL_STATE, action) {
                 ...state,
                 places: placesReducer(state.places, action)
             };
+        case RESET:
+            return { ...INITIAL_STATE };
         default:
             return state;
     }
@@ -89,6 +97,7 @@ function travellersReducer(state, action) {
 function visitsReducer(state, action) {
     switch (action.type) {
         case VISIT_ADDED:
+            console.log('visit added: ' + action.payload.key)
             var obj = { ...state };
             obj[action.payload.key] = action.payload.detail;
             return obj;

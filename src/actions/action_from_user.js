@@ -1,4 +1,4 @@
-import { tripsRef, visitsRef, NEW_TRIP } from '../consts';
+import { tripsRef, visitsRef, placesRef, NEW_TRIP } from '../consts';
 import { database } from '../firebase';
 
 export function newTrip() {
@@ -18,9 +18,10 @@ export function newTrip() {
         };
         updates['/trips/' + newTripKey].days[newDayKey] = {
             date: 'somedatestring',
-            visitOrder: []
+            visitOrder: ['placeholder']
         };
         updates['/users/1ZSEuHGCCEYrc1xVbu9ZeSh6mhn2/trips/' + newTripKey] = true;
+        updates['/visits/' + newTripKey] = {};
         return database.ref().update(updates).then(function() {
             // callOffTripListeners();
             dispatch({
@@ -31,58 +32,63 @@ export function newTrip() {
         });
     };
 }
-//
-// function newDay(tripid) {
-//     return dispatch => {
-//         tripsRef.child(tripid).child('days').push('SomedayStamp');
-//     }
-// };
-//
-// function newVisit(tripid, dayid = null, placeid) {
-//     return dispatch => {
-//         placesRef.child(placeid).set({
-//             name: 'somePlace',
-//             position: 'somePosition'
-//         }).then(function() {
-//             visitsRef.child(tripid).push({
-//                 day: dayid,
-//                 place: placeid,
-//                 time: 'timestamp'
-//             })
-//         }).catch(function() {
-//             visitsRef.child(tripid).push({
-//                 day: dayid,
-//                 place: placeid,
-//                 time: 'timestamp'
-//             })
-//         });
-//     }
-// };
-//
-// function removeVisit(tripid, dayid, visitid) {
-//
-// }
-//
+
+export function newDay(tripid) {
+    return () => {
+        tripsRef.child(tripid).child('days').push({
+            date: 'somedatestring',
+            visitOrder: ['placeholder']
+        });
+    };
+}
+
+export function removeDay() {
+
+}
+
+export function reorderDay() {
+
+}
+
+export function newVisit(dayid, placeid) {
+    return (dispatch, getState) => {
+        var tripid = getState().data.activeTrip.tripid;
+        placesRef.child(placeid).set({
+            name: 'somePlace',
+            position: 'somePosition'
+        }).then(() => {
+            var newVisitRef = visitsRef.child(tripid).push();
+            var newVisitKey = newVisitRef.key;
+            return newVisitRef.set({
+                placeid: placeid,
+                arriveTime: 'timestamp',
+                departTime: 'timestamp'
+            }).then(() => {return Promise.resolve(newVisitKey);});
+        }).then(newVisitKey => {
+            tripsRef.child(tripid).child('days').child(dayid).child('visitOrder').transaction(current => {
+                if (current[0] === 'placeholder') {
+                    return [newVisitKey];
+                } else {
+                    return [...current].concat([newVisitKey]);
+                }
+            });
+        });
+    };
+}
+
+export function removeVisit() {
+
+}
+
 export function reorderVisit(tripid, dayid, newOrder) {
-    return dispatch => {
-        tripsRef.child(tripid).child(dayid).child('visitOrder').transaction(newOrder);
-    }
+    return () => {
+        tripsRef.child(tripid).child('days').child(dayid).child('visitOrder').transaction(function() {
+            return newOrder;
+        });
+    };
 }
 
 export function dragVisitAcrossDay(tripid, old_day, old_day_order, new_day, new_day_order) {
-    return dispatch => {
-        trip
-    }
+    return () => {
+    };
 }
-//
-// function removeDay(tripid, dayid) {
-//
-// }
-//
-// function reorderDay() {
-//
-// }
-//
-// function removeTrip(tripid) {
-//
-// }

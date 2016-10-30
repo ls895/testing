@@ -3,14 +3,17 @@
 import { tripsRef,
     visitsRef,
     placesRef,
-    TRIP_ID, TRIP_TITLE,
-    DAY_ADDED, DAY_REMOVED, DAY_DETAIL_CHANGED,
+    RESET, TRIP_ID, TRIP_TITLE,
+    DAY_ADDED, DAY_REMOVED, DAY_ORDER, DAY_DETAIL_CHANGED,
     TRAVELLER_ADDED, TRAVELLER_REMOVED,
     VISIT_ADDED, VISIT_REMOVED, VISIT_CHANGED, PLACE_DETAIL
 } from '../consts';
 
 export function fetchTripDetail(tripid) {
     return dispatch => {
+        dispatch({
+            type: RESET
+        });
         dispatch({
             type: TRIP_ID,
             payload: tripid
@@ -20,6 +23,12 @@ export function fetchTripDetail(tripid) {
         tripsRef.child(tripid).child('title').once('value').then(function(snap) {
             dispatch({
                 type: TRIP_TITLE,
+                payload: snap.val()
+            });
+        });
+        tripsRef.child(tripid).child('dayOrder').on('value', function(snap) {
+            dispatch({
+                type: DAY_ORDER,
                 payload: snap.val()
             });
         });
@@ -75,7 +84,7 @@ export function fetchTripDetail(tripid) {
                     key: snap.key
                 }
             });
-            placesRef.child(snap.val().place).once('value').then(function(snap) {
+            placesRef.child(snap.val().placeid).once('value').then(function(snap) {
                 dispatch({
                     type: PLACE_DETAIL,
                     payload: {
