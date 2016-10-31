@@ -1,8 +1,67 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { DragSource } from 'react-dnd';
+import { DragSource, DropTarget } from 'react-dnd';
 import { ItemTypes, nonExistentVisit, nonExistentPlace } from '../consts';
 import { compose } from 'redux';
+
+const style = {
+  border: '1px dashed gray',
+  padding: '0.5rem 1rem',
+  marginBottom: '.5rem',
+  backgroundColor: 'white',
+  cursor: 'move'
+};
+
+const visitSource = {
+    beginDrag(props) {
+        return {
+            id: props.id,
+            day: props.day,
+            index: props.index
+        };
+    },
+    // endDrag(props, monitor) {
+    //     const { droppedAtDay } = monitor.getDropResult();
+    //     if (droppedAtDay === props.day) {
+    //         console.log('dropped on the same day');
+    //     } else {
+    //         props.removeVisit(props.id);
+    //     }
+    // }
+};
+
+const visitTarget = {
+    // drop(props) {
+    //     return {
+    //         droppedAtDay: props.day
+    //     };
+    // },
+    hover(props, monitor) {
+      const draggedId = monitor.getItem().id;
+      const fromDay = monitor.getItem().day;
+      if (draggedId === props.id) {
+          return;
+      }
+
+
+      if (draggedId !== props.id) {
+        props.moveItem(draggedId, fromDay, props.id);
+      }
+    }
+};
+
+function collectSource(connect, monitor) {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+    };
+}
+
+function collectTarget(connect) {
+    return {
+        connectDropTarget: connect.dropTarget()
+    };
+}
 
 class Visit extends Component {
     constructor(props) {
@@ -11,13 +70,15 @@ class Visit extends Component {
     }
     render() {
         console.log('visit rendered: ' + this.props.id)
-        return (
-            <div>
+        const { connectDragSource, connectDropTarget, isDragging } = this.props;
+        const opacity = isDragging ? 1 : 1;
+        return compose(connectDragSource, connectDropTarget)(
+            <div style={{ ...style, opacity }}>
                 <p>{this.props.visit.placeid}</p>
                 <p>{this.props.place.name}</p>
                 <p>{this.props.place.position}</p>
             </div>
-        )
+        );
     }
 }
 
@@ -44,4 +105,8 @@ function mapStateToProps(state, props) {
 
 }
 
-export default connect(mapStateToProps)(Visit);
+export default compose(
+    DragSource(ItemTypes.VISIT, visitSource, collectSource),
+    DropTarget(ItemTypes.VISIT, visitTarget, collectTarget),
+    connect(mapStateToProps)
+)(Visit);

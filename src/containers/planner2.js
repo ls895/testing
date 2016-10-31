@@ -11,16 +11,21 @@ class Planner extends Component {
     // handleNewDay() {
     //     this.props.newDay('trip1');
     // }
+    moveItem(sourceId, targetId, dayId) {
+        console.log('moving from', sourceId, 'to', targetId, 'on day', dayId)
+	}
 
     render() {
         console.log('planner rendered');
         return (
-            <div>
+            <div className="planner">
                 {
-                    this.props.dayOrder.map(key => {
+                    this.props.dayOrder.map((key, i) => {
                         return <Day
                             key={key}
                             id={key}
+                            index={i}
+                            moveItem={this.moveItem}
                         />;
                     })
                 }

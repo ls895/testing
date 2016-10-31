@@ -80,8 +80,9 @@ export function removeVisit() {
 
 }
 
-export function reorderVisit(tripid, dayid, newOrder) {
-    return () => {
+export function reorderVisit(dayid, newOrder) {
+    return (dispatch, getState) => {
+        var tripid = getState().data.activeTrip.tripid;
         tripsRef.child(tripid).child('days').child(dayid).child('visitOrder').transaction(function() {
             return newOrder;
         });

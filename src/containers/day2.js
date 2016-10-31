@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import makeOrderVisits from '../selectors/ordered_visits';
-import { newVisit } from '../actions/action_from_user';
+import { newVisit, reorderVisit } from '../actions/action_from_user';
 import { emptyArray } from '../consts';
 import Visit from './visit2';
 
@@ -10,19 +10,45 @@ class Day extends Component {
         this.props.newVisit(this.props.id, 'p10');
     }
 
+    moveItem(sourceId, fromDay, targetId) {
+        var visitOrder = [...this.props.visitOrder];
+        var targetIndex = visitOrder.indexOf(targetId);
+        if (fromDay === this.props.id) {
+            var sourceIndex = visitOrder.indexOf(sourceId);
+            visitOrder.splice(sourceIndex, 1);
+            visitOrder.splice(targetIndex, 0, sourceId);
+            this.props.reorderVisit(this.props.id, visitOrder);
+        } else {
+            // var targetIndex = visitOrder.indexOf(targetId);
+            // visitOrder.splice(targetIndex, 0, sourceId);
+            // this.props.reorderVisit(this.props.id, visitOrder);
+        }
+    }
+
+    // removeVisit(visitId) {
+    //     var visitOrder = [...this.props.visitOrder];
+    //     var toRemoveIndex = visitOrder.indexOf(visitId);
+    //     visitOrder.splice(toRemoveIndex, 1);
+    //     this.props.reorderVisit(this.props.id, visitOrder);
+    //     // console.log(visitOrder);
+    // }
+
     render() {
         console.log('day rendered: ' + this.props.id + ' ' + this.props.detail)
         return (
-            <div>
+            <div className="day">
                 <h3>{this.props.detail}</h3>
                 <button onClick={this.handleNewVisit.bind(this)}>New Visit</button>
                 <div>
                     {
-                        this.props.visitOrder.map(key => {
+                        this.props.visitOrder.map((key, i) => {
                             return (
                                 <Visit
                                     key={key}
                                     id={key}
+                                    day={this.props.id}
+                                    index={i}
+                                    moveItem={this.moveItem.bind(this)}
                                 />
                             )
                         })
@@ -31,26 +57,6 @@ class Day extends Component {
             </div>
         );
     }
-    // render() {
-    //     console.log('day rendered for day: ' + this.props.id)
-    //     return <div>
-    //         <h4>{this.props.date}</h4>
-    //         <button onClick={this.handleNewVisit.bind(this)}>New Visit</button>
-    //         <div>
-    //             {
-    //                 this.props.orderedVisits.map(visit => {
-    //                     return (
-    //                         <Visit
-    //                             key={visit.key}
-    //                             id={visit.key}
-    //                             placeid={visit.placeid}
-    //                         />
-    //                     );
-    //                 })
-    //             }
-    //         </div>
-    //     </div>;
-    // }
 }
 
 function mapStateToProps(state, props) {
@@ -67,4 +73,4 @@ function mapStateToProps(state, props) {
     }
 }
 
-export default connect(mapStateToProps, { newVisit })(Day);
+export default connect(mapStateToProps, { newVisit, reorderVisit })(Day);
