@@ -23,11 +23,6 @@ ReactDOM.render(
     document.querySelector('.container')
 );
 
-
-// store.dispatch(fetchTrips('1ZSEuHGCCEYrc1xVbu9ZeSh6mhn2'));
-
-// store.dispatch(fetchTripDetail('trip1'));
-// store.dispatch(fetchTripDetail('trip2'));
 window.store = store;
 window.newTrip = newTrip;
 window.reorderVisit = reorderVisit;

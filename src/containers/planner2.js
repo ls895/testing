@@ -49,4 +49,3 @@ export default compose(
     DragDropContext(HTML5Backend),
     connect(mapStateToProps)
 )(Planner);
-// export default connect(mapStateToProps)(Planner);

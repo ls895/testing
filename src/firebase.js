@@ -10,4 +10,4 @@ var config = {
 
 firebase.initializeApp(config);
 
-module.exports.database = firebase.database();
+export const database = firebase.database();

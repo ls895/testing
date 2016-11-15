@@ -94,6 +94,8 @@ export function fetchTripDetail(tripid) {
                 });
             });
             visitsRef.child(tripid).child(key).on('child_changed', function(snap) {
+                alert('child_changed')
+                console.log(snap.val())
                 dispatch({
                     type: VISIT_CHANGED,
                     payload: {

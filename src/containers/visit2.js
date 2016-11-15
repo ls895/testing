@@ -15,51 +15,34 @@ const style = {
 const visitSource = {
     beginDrag(props) {
         return {
-            id: props.id,
-            day: props.day,
-            index: props.index
+            id: props.id
         };
-    },
-    // endDrag(props, monitor) {
-    //     const { droppedAtDay } = monitor.getDropResult();
-    //     if (droppedAtDay === props.day) {
-    //         console.log('dropped on the same day');
-    //     } else {
-    //         props.removeVisit(props.id);
-    //     }
-    // }
+    }
 };
 
 const visitTarget = {
-    // drop(props) {
-    //     return {
-    //         droppedAtDay: props.day
-    //     };
-    // },
     hover(props, monitor) {
       const draggedId = monitor.getItem().id;
-      const fromDay = monitor.getItem().day;
       if (draggedId === props.id) {
           return;
       }
-
-
       if (draggedId !== props.id) {
-        props.moveItem(draggedId, fromDay, props.id);
+        props.moveItem(draggedId, props.id);
       }
     }
 };
 
 function collectSource(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
+    return {
+        connectDragSource: connect.dragSource(),
+        isDragging: monitor.isDragging()
     };
 }
 
-function collectTarget(connect) {
+function collectTarget(connect, monitor) {
     return {
-        connectDropTarget: connect.dropTarget()
+        connectDropTarget: connect.dropTarget(),
+        isOver: monitor.isOver()
     };
 }
 
@@ -70,8 +53,8 @@ class Visit extends Component {
     }
     render() {
         console.log('visit rendered: ' + this.props.id)
-        const { connectDragSource, connectDropTarget, isDragging } = this.props;
-        const opacity = isDragging ? 1 : 1;
+        const { connectDragSource, connectDropTarget, isDragging, isOver } = this.props;
+        const opacity = isDragging || isOver ? 0 : 1;
         return compose(connectDragSource, connectDropTarget)(
             <div style={{ ...style, opacity }}>
                 <p>{this.props.visit.placeid}</p>
@@ -83,7 +66,7 @@ class Visit extends Component {
 }
 
 function mapStateToProps(state, props) {
-    var visit = state.data.activeTrip.visits[props.id];
+    const visit = state.data.activeTrip.visits[props.id];
 
     if (visit) {
         if (state.data.activeTrip.places[visit.placeid]) {
